@@ -1,0 +1,7 @@
+numpy==1.24.4
+chempy==0.10.1
+pandas
+rdkit-pypi
+sympy==1.14.0
+plotext
+periodictable
