@@ -3,83 +3,145 @@ from chempy import *
 import periodictable
 from chempy.util.periodic import symbols
 from rdkit import Chem
+import pubchempy as pcp
+import requests
 
+def get_use_and_manufacturing(cid):
+    """
+    Obtiene la sección 'Use and Manufacturing' de un compuesto de PubChem usando la API PUG-View.
+    """
+    url = f"https://pubchem.ncbi.nlm.nih.gov/rest/pug_view/data/compound/{cid}/JSON"
+    response = requests.get(url)
+    
+    if response.status_code != 200:
+        print("Error al obtener datos:", response.status_code)
+        return None
+    
+    data = response.json()
+    
+    # Buscar la sección "Use and Manufacturing"
+    use_section = None
+    for section in data.get("Record", {}).get("Section", []):
+        if section.get("TOCHeading") == "Use and Manufacturing":
+            use_section = section
+            break
+    
+    if not use_section:
+        print("No se encontró la sección 'Use and Manufacturing'.")
+        return None
+    
+    # Extraer subsecciones y texto
+    extracted = {}
+    for subsection in use_section.get("Section", []):
+        heading = subsection.get("TOCHeading")
+        # Algunos tienen múltiples textos en 'Information'
+        texts = []
+        for info in subsection.get("Information", []):
+            if "Value" in info and "StringWithMarkup" in info["Value"]:
+                for item in info["Value"]["StringWithMarkup"]:
+                    texts.append(item.get("String"))
+        extracted[heading] = texts
+    
+    return extracted
+
+
+if __name__ == "__main__":
+    cid_hydrogen = 783  # CID de Hydrogen
+    
 
 def molecules_description(formula):
 
     # =========================
     # Propiedades con ChemPy
     # =========================
-    sustancia = Substance.from_formula(formula)
+    substance = Substance.from_formula(formula)
 
-    print("=== Propiedades Químicas ===")
+    print("\n=== Propiedades Químicas ===\n")
     print(f"Fórmula: {formula}")
-    print("Composición elemental (números atómicos):", sustancia.composition)
+    print("Composición elemental (números atómicos):", substance.composition)
 
-    print("\nComposición legible:")
-    for Z, cantidad in sustancia.composition.items():
-        print(f"  {symbols[Z-1]}: {cantidad}")  # Z-1 corrige índice
+    print("Composición legible:")
+    for Z, quantity in substance.composition.items():
+        print(f"  {symbols[Z-1]}: {quantity}")  # Z-1 corrige índice
 
-    masa = round(sustancia.molar_mass(), 3)
-    print(f"\nMasa molar: {masa} g/mol")
+    mass = round(substance.molar_mass(), 3)
+    print(f"Masa molar: {mass} g/mol")
 
-    num_atomos = sum(sustancia.composition.values())
-    print(f"Número total de átomos: {num_atomos}")
+    num_atoms = sum(substance.composition.values())
+    print(f"Número total de átomos: {num_atoms}")
+    
+    print("\n=== Propiedades avanzadas ===\n")
+    
+    extended_substance = pcp.get_compounds(substance.name,'name')
+    extended_substance_info = extended_substance[0]
+   
+    
+    # Extended information
 
-    # =========================
-    # Estructura molecular en texto con RDKit
-    # =========================
-    # Diccionario SMILES para moléculas conocidas
-    smiles_dict = {
-        "C2H6O": "CCO",
-        "CH4": "C",
-        "H2O": "O",
-        "CO2": "O=C=O",
-        "C6H6": "c1ccccc1"
-    }
+    print("CID:", extended_substance_info.cid)
+    print("Nombre IUPAC:", extended_substance_info.iupac_name)
+    print("Fórmula molecular:", extended_substance_info.molecular_formula)
 
-    smiles = smiles_dict.get(formula)
+    # Identifiers
 
-    if smiles is None:
-        print("\nNo se encontró SMILES para la fórmula. Solo se muestran propiedades.")
-    else:
-        mol = Chem.MolFromSmiles(smiles)
-        
-        print("\n=== Estructura Molecular (texto) ===")
-        print(f"SMILES: {Chem.MolToSmiles(mol)}")
-        
-        print("\nÁtomos:")
-        for atom in mol.GetAtoms():
-            print(f"Índice {atom.GetIdx():2d} → {atom.GetSymbol()}, "
-                f"valencia={atom.GetTotalValence()}, "
-                f"Hs={atom.GetTotalNumHs()}")
-        
-        print("\nEnlaces:")
-        for bond in mol.GetBonds():
-            a1 = bond.GetBeginAtom().GetSymbol()
-            a2 = bond.GetEndAtom().GetSymbol()
-            print(f"{a1} - {a2}  tipo={bond.GetBondType()}")
+    print("InChI:", extended_substance_info.inchi)
+    print("SMILES:", extended_substance_info.smiles)
 
-def getElementAttribute(Z, attr):
-    return getattr(periodic, attr, {}).get(Z, "No disponible")
+    print("\n=======Substance Usage=========\n")
+
+    usage_data = get_use_and_manufacturing(extended_substance_info.cid)
+    
+    if usage_data:
+        for section, texts in usage_data.items():
+            print(f"\n=== {section} ===\n")
+            for text in texts:
+                print("-", text)
 
 def element_info(symbol):
     """
     Imprime información completa de un elemento químico usando periodictable.
     """
-
     symbol = symbol.capitalize()  # Asegura que la primera letra sea mayúscula
 
     try:
         element = periodictable.elements.symbol(symbol)
+
+        extended_element = pcp.get_compounds(element.name,'name')
+        extended_element_info = extended_element[0]
+        
+
+
+
     except KeyError:
         print(f"❌ Símbolo químico '{symbol}' no válido")
         return
-
-    print("\n=== Información completa del elemento químico ===")
+    
+    # Basic information
+    
+    print("\n=== Información completa del elemento químico ===\n")
     print(f"Símbolo químico        : {element.symbol}")
     print(f"Número atómico         : {element.number}")
     print(f"Nombre                 : {element.name}")
     print(f"Masa atómica (u)       : {element.mass}")
     print(f"Densidad (g/cm³)       : {getattr(element, 'density', 'No disponible')}")
     
+    # Extended information
+
+    print("CID:", extended_element_info.cid)
+    print("Nombre IUPAC:", extended_element_info.iupac_name)
+    print("Fórmula molecular:", extended_element_info.molecular_formula)
+    
+    # Identifiers
+
+    print("InChI:", extended_element_info.inchi)
+    print("SMILES:", extended_element_info.smiles)
+
+    print("\n=============== Element Usage =================\n")
+
+    usage_data = get_use_and_manufacturing(extended_element_info.cid)
+    
+    if usage_data:
+        for section, texts in usage_data.items():
+            print(f"\n=== {section} ===\n")
+            for text in texts:
+                print("-", text)

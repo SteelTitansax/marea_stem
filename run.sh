@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Activar entorno virtual
-ENV_DIR="$HOME/venv_stem311"
+ENV_DIR="$HOME/marea_stem/venv_stem311"
 echo "🔹 Activando entorno virtual en $ENV_DIR ..."
 
 source "$ENV_DIR/bin/activate"
