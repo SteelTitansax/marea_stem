@@ -45,8 +45,7 @@ def get_use_and_manufacturing(cid):
     return extracted
 
 
-if __name__ == "__main__":
-    cid_hydrogen = 783  # CID de Hydrogen
+
     
 
 def molecules_description(formula):
