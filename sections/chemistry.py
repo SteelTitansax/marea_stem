@@ -42,7 +42,8 @@ def chemistry_section():
             print("=" * num_layout_equals)
             print("🧪  Opción 0: Descripción de compuesto químico")
             print("🔬  Opción 1: Descripción de elemento químico")
-            print("🚪  Opción 2: Salir")
+            print("⚗️   Opción 2: Descripción de reacción química , obtención de datos termodinamicos de equilibrio")
+            print("🚪  Opción 3: Salir")
             print("=" * num_layout_equals)
 
 
@@ -72,11 +73,27 @@ def chemistry_section():
                         element_info(simbolo)
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
+                
+                # ⚗️    Reaction query
+                # -------------------------------------------------
 
+                case "2":
+                    try:
+                        print("⚙️ Consultando reaccion ...")
+                        react1 = input("Introduce el simbolo de la primera molecula: ")
+                        react2 = input("Introduce el simbolo de la segunda molecula: ")
+                        product1 = input("Introduce el simbolo del primer producto: ")
+                        product2 = input("Introduce el simbolo del segundo producto: ")
+
+                        analize_reaction(react1,react2,product1,product2)
+
+                    except Exception as e:
+                        print(f"❌ Error al realizar la acción : {e}")
+                
                 # 👋 Program Exit
                 # -----------------------------------
                 
-                case "2":
+                case "3":
 
                     print("Saliendo de seccion química ⚗️")
                     break

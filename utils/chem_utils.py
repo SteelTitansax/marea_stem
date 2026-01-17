@@ -144,3 +144,24 @@ def element_info(symbol):
             print(f"\n=== {section} ===\n")
             for text in texts:
                 print("-", text)
+
+
+def analize_reaction(react1,react2,product1,product2):
+
+    if react1 == '' or react2 == '':
+        reactive = react1 + react2
+        reaction = balance_stoichiometry({reactive},{product1,product2})
+    elif product1 == '' or product2 == '':
+        product = product1 + product2 
+        reaction = balance_stoichiometry({react1,react2},{product})
+    else :
+        reaction = balance_stoichiometry({react1,react2},{product1,product2})
+    
+    reaction_converted = Reaction(*reaction)
+    reaction_keys = reaction_converted.keys()
+    reaction_order = reaction_converted.order()
+
+    print(f"Reaction described : {reaction_converted.string()}")
+    print(f"Reaction keys : {reaction_keys}")
+    print(f"Reaction order : {reaction_order}")
+    
