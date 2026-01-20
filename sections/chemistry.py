@@ -80,12 +80,12 @@ def chemistry_section():
                 case "2":
                     try:
                         print("⚙️ Consultando reaccion ...")
-                        react1 = input("Introduce el simbolo de la primera molecula: ")
-                        react2 = input("Introduce el simbolo de la segunda molecula: ")
-                        product1 = input("Introduce el simbolo del primer producto: ")
-                        product2 = input("Introduce el simbolo del segundo producto: ")
+                        react1 = input("Introduce el simbolo de la primera molecula: " ) 
+                        react2 = input("Introduce el simbolo de la segunda molecula: ") 
+                        product1 = input("Introduce el simbolo del primer producto: ") 
+                        product2 = input("Introduce el simbolo del segundo producto: ") 
 
-                        analize_reaction(react1,react2,product1,product2)
+                        analize_reaction(react1.upper(),react2.upper(),product1.upper(),product2.upper())
 
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
