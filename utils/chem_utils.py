@@ -184,75 +184,66 @@ def analize_reaction(react1,react2,product1,product2):
         reactants_dict, products_dict = balance_stoichiometry(reactants, products)
  
 
-        print("Por favor escoje entre una de estas tres opciones")
-        print("=================================================")
-        print("Reacción solo fase gás (Opción 0)")
-        print("Reacción solo fase líquida (Opción 1)")
-        print("Reacción fase gás-líquida (Opcion 2)")
-        print("=================================================")
+        print("Nota: Los parametros termodinamicos solo estan disponibles de manera dinamica en fase gas")
+        print("Por favor crear un yaml liquido de forma manual si la reacción es liquido-liquido o gas-liquido")
+        print("===============================================================================================")
 
-        thermo_option = input("Opción: ")
+        gas = ct.Solution("gri30.yaml")
+        
+        T = float(input("introduce temperatura de operacion en Kº: "))
+        P = ct.one_atm
+        
+        reaction_stoich = {}
 
-        match thermo_option: 
+        for sp, v in reactants_dict.items():
+            reaction_stoich[sp] = -v  # reactivo → negativo
 
-            case "0" :
+        for sp, v in products_dict.items():
+            reaction_stoich[sp] = v   # producto → positivo
 
-                gas = ct.Solution("gri30.yaml")
-                
-                T = float(input("introduce temperatura de operacion en Kº: "))
-                P = ct.one_atm
-                
-                reaction_stoich = {}
+        composition = {sp: 1 for sp in reaction_stoich.keys()}
+        print(composition)
+        gas.TPX = T,P,composition 
+        
 
-                for sp, v in reactants_dict.items():
-                    reaction_stoich[sp] = -v  # reactivo → negativo
+        gas.equilibrate("TP")
 
-                for sp, v in products_dict.items():
-                    reaction_stoich[sp] = v   # producto → positivo
+        data = []
 
-                composition = {sp: 1 for sp in reaction_stoich.keys()}
-                print(composition)
-                gas.TPX = T,P,composition 
-                
+        for sp in gas.species_names:
+            i = gas.species_index(sp)
+            if gas.X[i] > 1e-6:
+                data.append({
+                    "Especie": sp,
+                    "x": gas.X[i],
+                    "H (J/mol)": gas.partial_molar_enthalpies[i],
+                    "S (J/mol.K)": gas.partial_molar_entropies[i],
+                    "G (J/mol)": gas.chemical_potentials[i]
+                    })
+        
+        H = gas.partial_molar_enthalpies
+        S = gas.partial_molar_entropies
+        G = gas.chemical_potentials 
+        
+        delta_H_rxn = sum(reaction_stoich[sp] * H[gas.species_index(sp)] for sp in reaction_stoich)
+        delta_S_rxn = sum(reaction_stoich[sp] * S[gas.species_index(sp)] for sp in reaction_stoich)
+        delta_G_rxn = sum(reaction_stoich[sp] * G[gas.species_index(sp)] for sp in reaction_stoich)
 
-                gas.equilibrate("TP")
+        df = pd.DataFrame(data)
+        R = ct.gas_constant  # J/mol/K
+        T = gas.T
 
-                data = []
+        K_eq = math.exp(-float(delta_G_rxn) / (R * T))
+        
+        print("Constante de equilibrio K:", K_eq)
 
-                for sp in gas.species_names:
-                    i = gas.species_index(sp)
-                    if gas.X[i] > 1e-6:
-                        data.append({
-                            "Especie": sp,
-                            "x": gas.X[i],
-                            "H (J/mol)": gas.partial_molar_enthalpies[i],
-                            "S (J/mol.K)": gas.partial_molar_entropies[i],
-                            "G (J/mol)": gas.chemical_potentials[i]
-                            })
-                
-                H = gas.partial_molar_enthalpies
-                S = gas.partial_molar_entropies
-                G = gas.chemical_potentials 
-                
-                delta_H_rxn = sum(reaction_stoich[sp] * H[gas.species_index(sp)] for sp in reaction_stoich)
-                delta_S_rxn = sum(reaction_stoich[sp] * S[gas.species_index(sp)] for sp in reaction_stoich)
-                delta_G_rxn = sum(reaction_stoich[sp] * G[gas.species_index(sp)] for sp in reaction_stoich)
+        print("ΔH_rxn (J/mol):", delta_H_rxn)
+        print("ΔS_rxn (J/mol·K):", delta_S_rxn)
+        print("ΔG_rxn (J/mol):", delta_G_rxn)
 
-                df = pd.DataFrame(data)
-                print("Nota : Si algun componente no aparece ha sido consumido en la reacción de equilibrio o su composisión es infinitesimal")                
-                R = ct.gas_constant  # J/mol/K
-                T = gas.T
-
-                K_eq = math.exp(-float(delta_G_rxn) / (R * T))
-                
-                print("Constante de equilibrio K:", K_eq)
-
-                print("ΔH_rxn (J/mol):", delta_H_rxn)
-                print("ΔS_rxn (J/mol·K):", delta_S_rxn)
-                print("ΔG_rxn (J/mol):", delta_G_rxn)
-
-                print(df)
-    
+        print(df)
+        print("==========================================================================================")
+        print("Nota: Si no aparece algun reactivo o producto es porque su composición es infinitesimal ( se ha consumido todo en el equilibrio , consultad x ") 
 
 
 
