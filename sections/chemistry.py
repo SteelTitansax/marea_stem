@@ -15,6 +15,8 @@ warnings.filterwarnings("ignore", message="pkg_resources is deprecated as an API
 import os
 from constants import num_layout_equals
 from utils.chem_utils import *
+import plotext as plt
+
 # ------------------------
 # Main Code Section
 # ------------------------
@@ -43,7 +45,8 @@ def chemistry_section():
             print("🧪  Opción 0: Descripción de compuesto químico")
             print("🔬  Opción 1: Descripción de elemento químico")
             print("⚗️   Opción 2: Descripción de reacción química , obtención de datos termodinamicos de equilibrio")
-            print("🚪  Opción 3: Salir")
+            print("⚗️   Opción 3: Descripción de la cinética química de una reacción")
+            print("🚪  Opción 4: Salir")
             print("=" * num_layout_equals)
 
 
@@ -90,10 +93,28 @@ def chemistry_section():
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
                 
+
+                # ⚗️    Kinetics section
+                # -------------------------------------------------
+
+                case "3":
+                    try:
+                        
+                        params = get_user_parameters()
+                        t, C = run_simulation(params)
+
+                        plt.clf()
+                        plt.plot(t, C, label="Simulación (C (mol/m3) vs t(s))", color="white")
+                        plt.canvas_color("black")
+                        plt.clear_color()
+                        plt.show()
+                        
+                    except Exception as e:
+                        print(f"❌ Error al realizar la acción : {e}")
                 # 👋 Program Exit
                 # -----------------------------------
                 
-                case "3":
+                case "4":
 
                     print("Saliendo de seccion química ⚗️")
                     break

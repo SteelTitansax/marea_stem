@@ -8,6 +8,9 @@ import requests
 import cantera as ct
 import pandas as pd
 import math
+import numpy as np
+from scipy.integrate import solve_ivp
+from constants import R
 
 def get_use_and_manufacturing(cid):
     """
@@ -248,8 +251,89 @@ def analize_reaction(react1,react2,product1,product2):
 
 
 
+def get_user_parameters():
+    print("\n=== CONFIGURACIÓN DEL MODELO CINÉTICO ===\n")
+
+    params = {}
+
+    # Tipo de modelo
+    params["model"] = input(
+        "Tipo de modelo (empirical / arrhenius / mechanism): "
+    ).lower()
+
+    # Reactor
+    params["reactor"] = input(
+        "Tipo de reactor (batch / CSTR / FPR): "
+    ).lower()
+
+    # Especie principal
+    params["species"] = input(
+        "Nombre de la especie (ej: A): "
+    )
+
+    # Concentración inicial
+    params["C0"] = float(
+        input(f"Concentración inicial de {params['species']} [ej: 1.0 mol/m3]: ")
+    )
+
+    # Orden de reacción (solo empírico)
+    if params["model"] == "empirical":
+        params["order"] = float(
+            input("Orden de reacción n: ")
+        )
+
+        params["k"] = float(
+            input("Constante cinética k [1/s^(n-1)] (ej 0.10 m3/(mol·s)): ")
+        )
+
+    # Arrhenius
+    if params["model"] == "arrhenius":
+        params["A"] = float(input("Factor preexponencial A (1.0e3     1/s) : "))
+        params["Ea"] = float(input("Energía de activación Ea [J/mol] 5.0e4    J/mol : "))
+        params["T"] = float(input("Temperatura [K] (ej: 500 K) : "))
+
+    # Tiempo de simulación
+    params["t_end"] = float(
+        input("Tiempo final de simulación [s] (ej. 20 s) : ")
+    )
+
+    params["n_points"] = int(
+        input("Número de puntos de tiempo (ej 100): ")
+    )
+
+    print("\n✔ Parámetros cargados correctamente\n")
+    return params
 
 
 
+def reaction_rate(C, params):
+    if params["model"] == "empirical":
+        return params["k"] * C**params["order"]
 
+    elif params["model"] == "arrhenius":
+        k = params["A"] * np.exp(-params["Ea"] / (R * params["T"]))
+        return k * C
+
+    else:
+        raise ValueError("Modelo cinético no soportado")
+
+def batch_ode(t, y, params):
+    C = y[0]
+    r = reaction_rate(C, params)
+    return [-r]
+
+def run_simulation(params):
+    t_span = (0, params["t_end"])
+    t_eval = np.linspace(0, params["t_end"], params["n_points"])
+
+    sol = solve_ivp(
+        batch_ode,
+        t_span,
+        [params["C0"]],
+        t_eval=t_eval,
+        args=(params,)
+    )
+
+    
+    return sol.t, sol.y[0]
 

@@ -25,3 +25,5 @@ DB_PATH = "./data.db"
 G = 6.67430e-11 # Constante de gravitación universal
 
 k = 8.9875517923e9  # Constante de Coulomb (N·m²/C²)
+
+R = 8.314  # J/mol/K

@@ -41,7 +41,7 @@ if __name__ == "__main__":
             print("=" * num_layout_equals)
             print("🌊 Hola, soy Marea (STEM Version), tu asistente virtual.")
             print("=" * num_layout_equals)
-            print("Selecciona tu secciónn:")
+            print("Selecciona tu sección:")
             print("=" * num_layout_equals)
             print("=" * num_layout_equals)
             print("📐  Opción 0: Matemáticas")
