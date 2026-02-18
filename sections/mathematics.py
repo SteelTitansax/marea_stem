@@ -40,15 +40,17 @@ def mathematics_section():
             print("Selecciona tu acción:")
             print("=" * num_layout_equals)
             print("=" * num_layout_equals)
-            print("📈  Opción 0: Graficar función / Resolver función en un punto")
-            print("📐  Opción 1: Derivadas de una función")
+            print("📊  Opción 0: Graficar función / Resolver función en un punto")
+            print("📉  Opción 1: Derivadas de una función")
             print("∫   Opción 2: Integral de una función")
-            print("🔢  Opción 3: Logaritmo o exponencial de un número")
-            print("🧮  Opción 4: Resolución de sistemas de ecuaciones")
-            print("📐  Opción 5: Trigonometría")
-            print("🔀  Opción 6: Permutaciones")
-            print("🔢  Opción 7: Combinaciones")
-            print("🚪  Opción 6: Salir")
+            print("📟  Opción 3: Logaritmo o exponencial de un número")
+            print("🧩  Opción 4: Resolución de sistemas de ecuaciones")
+            print("🧮  Opción 5: Resolución de sistemas matriciales")
+            print("📐  Opción 6: Trigonometría")
+            print("🔀  Opción 7: Permutaciones")
+            print("🎯  Opción 8: Combinaciones")
+            print("🚪  Opción 9: Salir")
+
             print("=" * num_layout_equals)
 
 
@@ -103,14 +105,14 @@ def mathematics_section():
                 case "3":
                     try:
                         print("∫  Entrando en sección integrales")
-                        log_answer = input("logaritmo o exponencial (Log == 0 / Exp == 1): ")
-                        number = input("introduzca numero para realizar operacion")
+                        log_answer = input("logaritmo o exponencial (Log == 0 / Neperian Exp == 1): ").strip()
+                        number = input("introduzca numero para realizar operacion: ").strip()
                         if log_answer == "0":
-                            result_log = round(math.log(number,10),4)
-                            print(f"El logaritmo de {number} es {result_log}")
+                            result_log = round(math.log(float(number),10),4)
+                            print(f"El logaritmo de {number} es {str(result_log)}")
                         else:
-                            result_exp = math.e**number
-                            print(f"La exponencial de {number} es {result_exp}")
+                            result_exp = round(math.e**float(number),4)
+                            print(f"La exponencial de {number} es {str(result_exp)}")
 
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
@@ -132,10 +134,26 @@ def mathematics_section():
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
 
+                case "5":
+
+                # 📐  Matrix solver ecuation
+                # -------------------------------------------------
+
+                        print("Resolucion de sistemas de ecuaciónes linesales\n")
+
+                        m = int(input("Número de ecuaciones: "))
+                        n = int(input("Número de incógnitas: "))
+
+                        A = read_matrix(m, n, "A")
+                        b = read_vector(m, "b")
+
+                        solve_system(A, b)
+
+
                 # 📐  Trigonometric ecuations
                 # -------------------------------------------------
 
-                case "5":
+                case "6":
                     try:
                         print("⚙️ Realizando calculos trigonometricos")
                         cateto_contiguo = int(input("Introduce longitud de cateto 1: "))
@@ -157,7 +175,7 @@ def mathematics_section():
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
 
-                case "6":
+                case "7":
                     try:
                         n = int(input("Introduce el número total de elementos: "))
                         r = int(input("Introduce el número de elementos a elegir en cada permutación: "))
@@ -167,7 +185,7 @@ def mathematics_section():
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
 
-                case "7":
+                case "8":
                     try:
                         n = int(input("Introduce el número total de elementos: "))
                         r = int(input("Introduce el número de elementos a elegir en cada combinacion: "))
@@ -181,7 +199,7 @@ def mathematics_section():
                 # 👋 Program Exit
                 # -----------------------------------
                 
-                case "8":
+                case "9":
 
                     print("Saliendo de seccion matemáticas 📐")
                     break

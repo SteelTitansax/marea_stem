@@ -5,3 +5,11 @@ rdkit-pypi
 sympy==1.14.0
 plotext
 periodictable
+pubchempy
+cantera
+langchain_community
+langchain
+langchain-text-splitters
+pypdf
+sentence_transformers
+faiss_cpu

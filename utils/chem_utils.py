@@ -1,4 +1,3 @@
-# chempy_rdkit_terminal.py
 from chempy import *
 import periodictable
 from chempy.util.periodic import symbols
@@ -179,7 +178,7 @@ def analize_reaction(react1,react2,product1,product2):
     print(f"Reaction keys : {reaction_keys}")
     print(f"Reaction order : {reaction_order}")
     
-    analyze_thermodinamycs = input("Deseas obtener los parametros termodinamicos de la reaccion (Yes/No) ?")
+    analyze_thermodinamycs = input("Deseas obtener los parametros termodinamicos de la reaccion (Yes/No) ? : ")
     
     if analyze_thermodinamycs.lower() == "yes" or analyze_thermodinamycs.lower() == "y" :
         

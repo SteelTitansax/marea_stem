@@ -18,10 +18,11 @@ def physics_section():
             print("Selecciona tu acción:")
             print("=" * num_layout_equals)
             print("🎯  Opción 0: Cinemática")
-            print("⚙️   Opción 1: Dinámica")
-            print("🌍  Opción 2: Gravedad clásica")
+            print("🧲  Opción 1: Dinámica")
+            print("🌌  Opción 2: Gravedad clásica")
             print("⚡  Opción 3: Electromagnetismo")
-            print("🚪  Opción 4: Salir")
+            print("🏗️  Opción 4: Estática")
+            print("🚪  Opción 5: Salir")
             print("=" * num_layout_equals)
 
             answer = input("👉  ¿Qué deseas hacer? (selecciona una opción): ")
@@ -69,7 +70,7 @@ def physics_section():
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
 
-                # ⚡ ELECTROMAGNETISMO
+                # ⚡ ELECTROMAGNETISM
                 case "3":
                     try:
                         print("⚙️ Calculando fuerza eléctrica ...")
@@ -84,8 +85,15 @@ def physics_section():
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
 
-                # 🚪 Salir
+                # 🏗️ ESTATICA
                 case "4":
+                    try:
+                        print("⚙️ Calculando estática ...")
+                        run_static_analysis()
+                    except Exception as e:
+                        print(f"❌ Error al realizar la acción : {e}")
+                                # 🚪 Salir
+                case "5":
                     print("Saliendo de sección física ⚛️")
                     break
 

@@ -18,6 +18,7 @@ from sections.mathematics import *
 from sections.chemistry import *
 from sections.physics import *
 from sections.data_analysis import *
+from sections.engineering import *
 
 # ------------------------
 # Main Code Section
@@ -44,11 +45,13 @@ if __name__ == "__main__":
             print("Selecciona tu sección:")
             print("=" * num_layout_equals)
             print("=" * num_layout_equals)
-            print("📐  Opción 0: Matemáticas")
-            print("⚗️   Opción 1: Química")
-            print("🧲  Opción 2: Física")
-            print("📊  Opción 3: Análisis de datos")
-            print("❌  Opción 4: Salir")
+            print("🧮  Opción 0: Matemáticas")      
+            print("🧪  Opción 1: Química")          
+            print("🔬  Opción 2: Física")           
+            print("🛠️   Opción 3: Ingeniería")       
+            print("📈  Opción 4: Análisis de datos")
+            print("🚪  Opción 5: Salir")            
+
             print("=" * num_layout_equals)
 
             answer = input("👉  ¿Qué deseas hacer? (selecciona una opción): ")
@@ -87,10 +90,22 @@ if __name__ == "__main__":
                     except Exception as e:
                         print(f"❌ Error al realizar la acción : {e}")
 
+                # 🛠️   Engineering section
+                # -------------------------------------------------
+
+                case "3":
+                    try:
+                        print("🛠️  Entrando en sección ingenieria")
+                        engineering_section()
+
+                    except Exception as e:
+                        print(f"❌ Error al realizar la acción : {e}")
+
+
                 # 📊  Data analytics
                 # -------------------------------------------------
                 
-                case "3":
+                case "4":
                     try:
                         print("🧰 Entrando en la sección de análisis de datos")
                         quick_analysis()
@@ -101,7 +116,7 @@ if __name__ == "__main__":
                 # 👋 Program Exit
                 # -----------------------------------
                 
-                case "4":
+                case "5":
 
                     print("Espero haberte ayudado 👋")
                     break

@@ -8,5 +8,5 @@ source "$ENV_DIR/bin/activate"
 
 echo " Arrancando Marea STEM ..."
 
-python3 $HOME/marea_stem/chatbot.py
+python3 $HOME/Documentos/marea_stem/chatbot.py
 

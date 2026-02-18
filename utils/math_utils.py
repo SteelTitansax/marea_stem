@@ -1,4 +1,3 @@
-import plotext as plt
 import os 
 import plotext as plt
 import math
@@ -173,3 +172,60 @@ def combinations(n, r):
 
     result = math.factorial(n) // (math.factorial(r) * math.factorial(n - r))
     print(f"🔢 El número de combinaciones de {n} elementos tomados de {r} en {r} es: {result}")
+
+
+
+def read_matrix(rows, cols, name):
+    print(f"\nIntroduce la matriz {name} (fila por fila, separando con espacios):")
+    matrix = []
+    for i in range(rows):
+        while True:
+            try:
+                row = list(map(float, input(f"Fila {i+1}: ").split()))
+                if len(row) != cols:
+                    raise ValueError
+                matrix.append(row)
+                break
+            except ValueError:
+                print(f"⚠️ Debes introducir exactamente {cols} números.")
+    return np.array(matrix)
+
+
+def read_vector(n, name):
+    print(f"\nIntroduce el vector {name} ({n} valores):")
+    while True:
+        try:
+            vector = list(map(float, input().split()))
+            if len(vector) != n:
+                raise ValueError
+            return np.array(vector)
+        except ValueError:
+            print(f"⚠️ Debes introducir exactamente {n} números.")
+
+
+def solve_system(A, b):
+    Ab = np.hstack((A, b.reshape(-1, 1)))
+
+    rank_A = np.linalg.matrix_rank(A)
+    rank_Ab = np.linalg.matrix_rank(Ab)
+    n = A.shape[1]
+
+    print("\n--- RESULTADOS ---")
+    print(f"Rango(A)  = {rank_A}")
+    print(f"Rango(A*) = {rank_Ab}")
+    print(f"Número de incógnitas = {n}\n")
+
+    if rank_A < rank_Ab:
+        print("❌ Sistema incompatible (no tiene solución).")
+
+    elif rank_A == rank_Ab == n:
+        solution = np.linalg.solve(A, b)
+        print("✅ Sistema compatible determinado (solución única):")
+        for i, x in enumerate(solution, start=1):
+            print(f"x{i} = {x}")
+
+    else:
+        print("🔁 Sistema compatible indeterminado (infinitas soluciones).")
+
+
+

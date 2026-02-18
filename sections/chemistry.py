@@ -35,17 +35,17 @@ def chemistry_section():
         
 
             print("=" * num_layout_equals)
-            print("👩💻  Marea Chatbot STEM —  Seccion química")
+            print("🧪  Marea Chatbot STEM — Sección Química")
             print("=" * num_layout_equals)
-            print("⚗️  Bienvenido a la sección química.")
+            print("⚗️  Bienvenido a la sección de química.")
             print("=" * num_layout_equals)
             print("Selecciona tu acción:")
             print("=" * num_layout_equals)
             print("=" * num_layout_equals)
-            print("🧪  Opción 0: Descripción de compuesto químico")
-            print("🔬  Opción 1: Descripción de elemento químico")
-            print("⚗️   Opción 2: Descripción de reacción química , obtención de datos termodinamicos de equilibrio")
-            print("⚗️   Opción 3: Descripción de la cinética química de una reacción")
+            print("🧬  Opción 0: Descripción de compuesto químico")
+            print("🔎  Opción 1: Descripción de elemento químico")
+            print("🌡️  Opción 2: Descripción de reacción química, obtención de datos termodinámicos de equilibrio")
+            print("⏱️  Opción 3: Descripción de la cinética química de una reacción")
             print("🚪  Opción 4: Salir")
             print("=" * num_layout_equals)
 
