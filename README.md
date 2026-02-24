@@ -9,7 +9,7 @@ English
 ---
 # 🌊 Marea STEM – Key Points
 
-- "How many times do you need a quick back-of-the-envelope calculation or need to look up a spec in a manual to validate an idea, and it ends up taking 20 minutes?" 
+- "How many times do you need a quick back-of-the-envelope calculation or need to look up a spec in a manual to validate an idea, and it ends up taking 5 hours ?" 
 - The **downtime** from context switching (paper, calculator, **searching through folders of documents**) kills the speed of iteration in preliminary design. 
 - **Marea STEM:** Natural language → Python code execution → Results in seconds. **Plus, it can search your own documents (PDFs, manuals, notes) and extract the exact answer without you having to open them.** Show 2-3 quick examples: a calculation + a question about a technical document.
 - **Speed:** Immediate feedback.<br>2. **Traceability:** Shows you the code used.<br>3. **Multipurpose:** Math, physics, chemistry, data.<br>4. **Document memory:** Query your files as if you were talking to an expert who has read them all.
